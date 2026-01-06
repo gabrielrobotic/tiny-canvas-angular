@@ -10,7 +10,7 @@
     # pkgs.python311Packages.pip
     # pkgs.nodePackages.nodemon
     pkgs.zsh
-    pkgs.nodejs_22
+    pkgs.nodejs_24
   ];
   # Sets environment variables in the workspace
   env = { };
@@ -20,6 +20,7 @@
       # "vscodevim.vim"
       "google.gemini-cli-vscode-ide-companion"
       "bradlc.vscode-tailwindcss"
+      "angular.ng-template"
     ];
     # Enable previews
     previews = {
@@ -79,7 +80,19 @@
         default.openFiles = [ ".idx/dev.nix" "README.md" ];
       };
       # Runs when the workspace is (re)started
-      onStart = { };
+      onStart = {
+        angular-cli-setup = ''
+          echo "[onStart] Verificando Angular CLI..."
+
+          if ! command -v ng >/dev/null 2>&1; then
+            echo "Angular CLI não encontrado. Instalando globalmente..."
+            npm install -g @angular/cli
+          else
+            echo "Angular CLI já está instalado:"
+            ng version | head -n 1
+          fi
+        '';
+      };
     };
   };
 }
